@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { GET_COUNTRIES, GET_COUNTRIES_BY_CONTINENT } from "../../graphql/queries";
 import { groupCountriesByLanguage, filterGroupedCountries } from "../../graphql/dataManipulation";
+import Search from "../../components/Search"
+import GroupsBy from "./GroupBy"
+import Button from "../../components/Button"
+import Groups from "./Groups"
 
 const HomePage = () => {
   const [search, setSearch] = useState("");
@@ -46,31 +50,16 @@ const HomePage = () => {
 
   return (
     <div>
-      <form onSubmit={(e) => formOnSubmit(e)}>
-        <input type='text' onChange={(e) => inputOnChange(e)} />
-      </form>
-      <button onClick={() => buttonOnClick()} disabled={groupByContinent}>
-        Continent
-      </button>
-      <button onClick={() => buttonOnClick()} disabled={groupByLanguage}>
-        Language
-      </button>
-      {filtered === [] ? (
-        <h1>Loading posts..</h1>
-      ) : (
-        filtered.map((group) => {
-          return (
-            <div key={group.code}>
-              <h1>{group.name}</h1>
-              {group.countries.map((country) => {
-                return (
-                  <h2 key={country.code}>{country.name}</h2>
-                );
-              })}
-            </div>
-          );
-        })
-      )}
+      <Search formOnSubmit={formOnSubmit} inputOnChange={inputOnChange} />
+      <GroupsBy>
+        <Button buttonOnClick={buttonOnClick} active={groupByContinent}>
+          Continent
+        </Button>
+        <Button buttonOnClick={buttonOnClick} active={groupByLanguage}>
+          Language
+        </Button>
+      </GroupsBy>
+      <Groups filtered={filtered} />
     </div>
   );
 };
