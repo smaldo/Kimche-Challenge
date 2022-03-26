@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { useQuery } from "@apollo/react-hooks";
+import { GET_COUNTRIES, GET_COUNTRIES_BY_CONTINENT } from "../../graphql/queries";
+import { groupCountriesByLanguage, filterGroupedCountries } from "../../graphql/dataManipulation";
 
 const HomePage = () => {
   const [search, setSearch] = useState("");
