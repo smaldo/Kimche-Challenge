@@ -1,11 +1,31 @@
 import React, { useState, useEffect } from "react";
 import { useQuery } from "@apollo/react-hooks";
+import styled from "styled-components";
 import { GET_COUNTRIES, GET_COUNTRIES_BY_CONTINENT } from "../../graphql/queries";
 import { groupCountriesByLanguage, filterGroupedCountries } from "../../graphql/dataManipulation";
+import Header from "./Header";
 import Search from "../../components/Search"
 import GroupsBy from "./GroupBy"
 import Button from "../../components/Button"
 import Groups from "./Groups"
+
+const Home = styled.div`
+  min-height: 100%;
+  width: 90%;
+  margin: 30px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  @media (min-width: 481px) {
+    width: 80%;
+    padding: 0 20px;
+  }
+  @media (min-width: 769px) {
+    width: 769px;
+    padding: 0 30px;
+  } 
+`
 
 const HomePage = () => {
   const [search, setSearch] = useState("");
@@ -49,7 +69,8 @@ const HomePage = () => {
   }
 
   return (
-    <div>
+    <Home>
+      <Header />
       <Search formOnSubmit={formOnSubmit} inputOnChange={inputOnChange} />
       <GroupsBy>
         <Button buttonOnClick={buttonOnClick} active={groupByContinent}>
@@ -60,7 +81,7 @@ const HomePage = () => {
         </Button>
       </GroupsBy>
       <Groups filtered={filtered} />
-    </div>
+    </Home>
   );
 };
 export default HomePage;
