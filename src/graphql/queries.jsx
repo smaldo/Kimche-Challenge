@@ -8,7 +8,10 @@ query {
         capital
         currency
         phone
-        emojiU
+        emoji
+        continent {
+            name
+        }
         languages {
             code
             name
@@ -28,7 +31,7 @@ query {
             capital
             currency
             phone
-            emojiU
+            emoji
             languages {
                 name
             }
