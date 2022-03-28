@@ -26,6 +26,17 @@ const Home = styled.div`
     padding: 0 30px;
   } 
 `
+const Loading = styled.div`
+  height: 40px;
+  margin: 0px 0px 15px;
+  font-size: 25px;
+  font-weight: 700;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.43;
+  letter-spacing: 0.25px;
+  color: #3A3A3A;
+`
 
 const HomePage = () => {
   const [search, setSearch] = useState("");
@@ -33,7 +44,7 @@ const HomePage = () => {
   const [filtered, setFiltered] = useState([]);
   const [groupByContinent, setGroupByContinent] = useState(true);
   const [groupByLanguage, setGroupByLanguage] = useState(false);
-  const { data: { continents } = {} } = useQuery(GET_COUNTRIES_BY_CONTINENT);
+  const { loading, error, data: { continents } = {} } = useQuery(GET_COUNTRIES_BY_CONTINENT);
   const { data: { countries } = {} } = useQuery(GET_COUNTRIES);
   const [languages, setLanguages] = useState([]);
 
@@ -80,7 +91,14 @@ const HomePage = () => {
           Language
         </Button>
       </GroupsBy>
-      <Groups filtered={filtered} />
+      {
+        loading ? (
+          <Loading>Loading...</Loading>
+        ): (
+          <Groups filtered={filtered} />
+        )
+      }
+      
     </Home>
   );
 };

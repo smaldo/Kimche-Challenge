@@ -71,8 +71,8 @@ const SmallText = styled.div`
 
 const Groups = ({ filtered }) => {
   return <AllGroupsContainer>
-    {filtered === [] ? (
-      <h1>Countries not found</h1>
+    {filtered.length === 0 ? (
+      <GroupName>Countries not found</GroupName>
     ) : (
       filtered.map((group) =>
         <GroupsContainer key={group.code}>
