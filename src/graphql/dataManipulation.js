@@ -1,6 +1,7 @@
 import clone from "lodash/clone";
 import omit from "lodash/omit";
 import startsWith from "lodash/startsWith";
+import orderBy from "lodash/orderBy";
 
 export const groupCountriesByLanguage = (countries) => {
     const languages = [];
@@ -23,7 +24,7 @@ export const groupCountriesByLanguage = (countries) => {
         });
         
     }
-    return languages;
+    return orderBy(languages, ['name'],['asc']);
 };
 export const filterGroupedCountries = (groups, search) => {
     const filtered = [];

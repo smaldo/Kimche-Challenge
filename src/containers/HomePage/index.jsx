@@ -1,7 +1,42 @@
 import React, { useState, useEffect } from "react";
 import { useQuery } from "@apollo/react-hooks";
+import styled from "styled-components";
 import { GET_COUNTRIES, GET_COUNTRIES_BY_CONTINENT } from "../../graphql/queries";
 import { groupCountriesByLanguage, filterGroupedCountries } from "../../graphql/dataManipulation";
+import Header from "./Header";
+import Search from "../../components/Search"
+import GroupsBy from "./GroupBy"
+import Button from "../../components/Button"
+import Groups from "./Groups"
+
+const Home = styled.div`
+  min-height: 100%;
+  width: 90%;
+  margin: 30px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  @media (min-width: 481px) {
+    width: 80%;
+    padding: 0 20px;
+  }
+  @media (min-width: 769px) {
+    width: 769px;
+    padding: 0 30px;
+  } 
+`
+const Loading = styled.div`
+  height: 40px;
+  margin: 0px 0px 15px;
+  font-size: 25px;
+  font-weight: 700;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.43;
+  letter-spacing: 0.25px;
+  color: #3A3A3A;
+`
 
 const HomePage = () => {
   const [search, setSearch] = useState("");
@@ -9,7 +44,7 @@ const HomePage = () => {
   const [filtered, setFiltered] = useState([]);
   const [groupByContinent, setGroupByContinent] = useState(true);
   const [groupByLanguage, setGroupByLanguage] = useState(false);
-  const { data: { continents } = {} } = useQuery(GET_COUNTRIES_BY_CONTINENT);
+  const { loading, error, data: { continents } = {} } = useQuery(GET_COUNTRIES_BY_CONTINENT);
   const { data: { countries } = {} } = useQuery(GET_COUNTRIES);
   const [languages, setLanguages] = useState([]);
 
@@ -45,33 +80,26 @@ const HomePage = () => {
   }
 
   return (
-    <div>
-      <form onSubmit={(e) => formOnSubmit(e)}>
-        <input type='text' onChange={(e) => inputOnChange(e)} />
-      </form>
-      <button onClick={() => buttonOnClick()} disabled={groupByContinent}>
-        Continent
-      </button>
-      <button onClick={() => buttonOnClick()} disabled={groupByLanguage}>
-        Language
-      </button>
-      {filtered === [] ? (
-        <h1>Loading posts..</h1>
-      ) : (
-        filtered.map((group) => {
-          return (
-            <div key={group.code}>
-              <h1>{group.name}</h1>
-              {group.countries.map((country) => {
-                return (
-                  <h2 key={country.code}>{country.name}</h2>
-                );
-              })}
-            </div>
-          );
-        })
-      )}
-    </div>
+    <Home>
+      <Header />
+      <Search formOnSubmit={formOnSubmit} inputOnChange={inputOnChange} />
+      <GroupsBy>
+        <Button buttonOnClick={buttonOnClick} active={groupByContinent}>
+          Continent
+        </Button>
+        <Button buttonOnClick={buttonOnClick} active={groupByLanguage}>
+          Language
+        </Button>
+      </GroupsBy>
+      {
+        loading ? (
+          <Loading>Loading...</Loading>
+        ): (
+          <Groups filtered={filtered} />
+        )
+      }
+      
+    </Home>
   );
 };
 export default HomePage;
